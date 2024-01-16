@@ -5,7 +5,7 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-zkin_smartwallet = "3CT4tE6xNnhpPgvXhXRnK2qZooXxvwRqrJMuVdFXVjeY"
+zkin_smartwallet = "zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy"
 
 [registry]
 url = "https://api.apr.dev"

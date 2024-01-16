@@ -1,15 +1,29 @@
-use anchor_lang::prelude::*;
+mod verifying_key;
+mod account_data;
+mod instructions;
+mod processors;
+mod program_error;
 
-declare_id!("3CT4tE6xNnhpPgvXhXRnK2qZooXxvwRqrJMuVdFXVjeY");
+use anchor_lang::prelude::*;
+use crate::{
+  processors::create_wallet::NR_INPUTS,
+  instructions::create_wallet::*,
+};
+
+declare_id!("zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy");
 
 #[program]
 pub mod zkin_smartwallet {
-    use super::*;
+  use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        Ok(())
-    }
+  pub fn create_wallet(
+    ctx: Context<CreateWallet>,
+    _wallet_address: String,
+    proof_a: [u8; 64],
+    proof_b: [u8; 128],
+    proof_c: [u8; 64],
+    public_inputs_vec: [[u8; 32]; NR_INPUTS],
+  ) -> Result<()> {
+    processors::create_wallet::exec(ctx, proof_a, proof_b, proof_c, public_inputs_vec)
+  }
 }
-
-#[derive(Accounts)]
-pub struct Initialize {}
