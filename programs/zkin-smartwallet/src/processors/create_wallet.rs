@@ -9,7 +9,8 @@ use crate::{
 pub const NR_INPUTS: usize = 10;
 
 pub fn exec(
-  _ctx: Context<CreateWallet>,
+  ctx: Context<CreateWallet>,
+  wallet_address: String,
   proof_a: [u8; 64],
   proof_b: [u8; 128],
   proof_c: [u8; 64],
@@ -24,6 +25,12 @@ pub fn exec(
   ).map_err(|_| ErrorCode::InvalidProofData)?;
   
   verifier.verify().map_err(|_| ErrorCode::GrothVerificationError)?;
+
+  // update wallet state
+  let wallet = &mut ctx.accounts.wallet;
+  wallet.address = wallet_address;
+  wallet.owner = ctx.accounts.owner.key();
+  wallet.bump = ctx.bumps.wallet;
 
   Ok(())
 }

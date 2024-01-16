@@ -18,12 +18,12 @@ pub mod zkin_smartwallet {
 
   pub fn create_wallet(
     ctx: Context<CreateWallet>,
-    _wallet_address: String,
+    wallet_address: String,
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],
     public_inputs_vec: [[u8; 32]; NR_INPUTS],
   ) -> Result<()> {
-    processors::create_wallet::exec(ctx, proof_a, proof_b, proof_c, public_inputs_vec)
+    processors::create_wallet::exec(ctx, wallet_address, proof_a, proof_b, proof_c, public_inputs_vec)
   }
 }
