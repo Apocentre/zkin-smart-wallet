@@ -10,4 +10,6 @@ pub enum ErrorCode {
   GrothVerificationError,
   #[msg("Invalid idToken")]
   InvalidIdToken,
+  #[msg("RSA error")]
+  RsaError,
 }
