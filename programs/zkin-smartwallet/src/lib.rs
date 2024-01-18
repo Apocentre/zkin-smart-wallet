@@ -31,10 +31,8 @@ pub mod zkin_smartwallet {
 
   pub fn verify_jwt(
     ctx: Context<VerifyJwt>,
-    header: Vec<u8>,
-    payload: Vec<u8>,
-    sig: Vec<u8>,
+    data: [Vec<u8>; 3],
   ) -> Result<()> {
-    processors::verify_jwt::exec(ctx, header, payload, sig)
+    processors::verify_jwt::exec(ctx, data)
   }
 }
