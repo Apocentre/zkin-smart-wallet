@@ -12,12 +12,15 @@ const GOOGLE_PUBKEY_E: &str = "AQAB-oaAcBuKQvWc5E31kXm6d6vfaEZjrMc_KT3DsFdN0LcAk
 
 pub fn exec(
   _ctx: Context<VerifyJwt>,
-  data: [Vec<u8>; 3],
+  header: Vec<u8>,
+  payload: Vec<u8>,
+  sig: Vec<u8>,
 ) -> Result<()> {
   // We need to sha256 the following message <header>.<payload>
-  let mut msg = base64_url::decode(&data[0]).unwrap();
+  msg!(">>>>>>>> {}", &header[0].to_string());
+  let mut msg = header;
   msg.extend(b".");
-  msg.extend(base64_url::decode(&data[1]).unwrap());
+  msg.extend(payload);
   
   let mut hasher = Sha256::new();
   hasher.update(&msg);
@@ -31,7 +34,7 @@ pub fn exec(
   google_pubkey.verify(
     rsa::PaddingScheme::PKCS1v15Encrypt,
     &msg_hash,
-    &data[2]
+    &sig
   ).map_err(|_| ErrorCode::RsaError)?;
 
   Ok(())
