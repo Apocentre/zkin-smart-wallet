@@ -17,9 +17,9 @@ pub fn exec(
   sig: Vec<u8>,
 ) -> Result<()> {
   // We need to sha256 the following message <header>.<payload>
-  let mut msg = header;
+  let mut msg = base64_url::decode(&header).unwrap();
   msg.extend(b".");
-  msg.extend(payload);
+  msg.extend(base64_url::decode(&payload).unwrap());
   
   let mut hasher = Sha256::new();
   hasher.update(&msg);

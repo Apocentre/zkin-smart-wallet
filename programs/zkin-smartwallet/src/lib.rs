@@ -29,7 +29,7 @@ pub mod zkin_smartwallet {
     processors::create_wallet::exec(ctx, wallet_address, proof_a, proof_b, proof_c, public_inputs_vec)
   }
 
-  pub fn exec(
+  pub fn verify_jwt(
     ctx: Context<VerifyJwt>,
     header: Vec<u8>,
     payload: Vec<u8>,

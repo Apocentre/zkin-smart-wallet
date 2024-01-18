@@ -21,6 +21,7 @@ anchor-lang = "0.29.0"
 anchor-spl = "0.29.0"
 anchor-safe-math = "0.4.0"
 ahash = "=0.8.6"
+base64-url = "2"
 groth16-solana = { git = "https://github.com/Lightprotocol/groth16-solana", rev="d1165a0" }
 rsa = "0.4"
 sha2 = "0.10"
