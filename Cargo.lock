@@ -1681,9 +1681,8 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "rsa"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b0aeddcca1082112a6eeb43bf25fd7820b066aaf6eaef776e19d0a1febe38fe"
+version = "0.4.0"
+source = "git+https://github.com/Apocentre/RSA?branch=chore/fix_elf#1663a07ea2acb6c10074a79fc8740b7a21a89f98"
 dependencies = [
  "byteorder",
  "digest 0.9.0",

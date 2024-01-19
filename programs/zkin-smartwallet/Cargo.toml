@@ -22,5 +22,5 @@ anchor-spl = "0.29.0"
 anchor-safe-math = "0.4.0"
 ahash = "=0.8.6"
 groth16-solana = { git = "https://github.com/Lightprotocol/groth16-solana", rev="d1165a0" }
-rsa = "0.4"
+rsa = { git = "https://github.com/Apocentre/RSA", branch = "chore/fix_elf"}
 sha2 = "0.10"
