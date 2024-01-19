@@ -17,7 +17,6 @@ pub fn exec(
   sig: Vec<u8>,
 ) -> Result<()> {
   // We need to sha256 the following message <header>.<payload>
-  msg!(">>>>>>>> {}", &header[0].to_string());
   let mut msg = header;
   msg.extend(b".");
   msg.extend(payload);
