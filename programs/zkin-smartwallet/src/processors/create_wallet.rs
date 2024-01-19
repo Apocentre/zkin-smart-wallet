@@ -12,7 +12,7 @@ pub fn exec(
   public_inputs_vec: Vec<u8>,
 ) -> Result<()> {
   verify_proof(
-    wallet_address,
+    &wallet_address,
     proof_a,
     proof_b,
     proof_c,

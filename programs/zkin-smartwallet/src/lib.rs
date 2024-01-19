@@ -5,10 +5,7 @@ mod processors;
 mod program_error;
 
 use anchor_lang::prelude::*;
-use crate::{
-  processors::create_wallet::NR_INPUTS,
-  instructions::create_wallet::*,
-};
+use crate::instructions::create_wallet::*;
 
 declare_id!("zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy");
 
@@ -22,7 +19,7 @@ pub mod zkin_smartwallet {
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],
-    public_inputs_vec: [[u8; 32]; NR_INPUTS],
+    public_inputs_vec: Vec<u8>,
   ) -> Result<()> {
     processors::create_wallet::exec(ctx, wallet_address, proof_a, proof_b, proof_c, public_inputs_vec)
   }
