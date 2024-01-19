@@ -1,4 +1,5 @@
 import * as anchor from "@coral-xyz/anchor";
+import Web3 from "@apocentre/solana-web3";
 import {createAndSendV0Tx} from "./utils/tx.js"
 import {expect} from "./utils/solana-chai.js";
 
@@ -19,9 +20,11 @@ describe("Verify JWT", () => {
     })
     .instruction();
   
+    const web3 = Web3(user.publicKey)
+    const cbIx = web3.getComputationBudgetIx(1_000_000);
     await createAndSendV0Tx(
       provider,
-      [ix],
+      [cbIx, ix],
       user.publicKey,
       [user]
     );
