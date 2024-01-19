@@ -21,6 +21,7 @@ describe("Verify JWT", () => {
     .instruction();
   
     const web3 = Web3(user.publicKey)
+    // TODO: unfortunately the current on-chain RSA verify exceed the MAX compute budget
     const cbIx = web3.getComputationBudgetIx(1_000_000);
     await createAndSendV0Tx(
       provider,
