@@ -1,4 +1,4 @@
-mod verifying_key;
+mod zk;
 mod account_data;
 mod instructions;
 mod processors;
