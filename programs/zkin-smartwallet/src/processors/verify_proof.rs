@@ -1,8 +1,6 @@
 use anchor_lang::prelude::*;
-use rsa::{RSAPublicKey, BigUint, PublicKey, Hash};
-use sha2::{Sha256, Digest};
 use crate::{
-  instructions::verify_jwt::VerifyJwt,
+  instructions::verify_proof::VerifyProof,
   program_error::ErrorCode,
 };
 
@@ -10,30 +8,10 @@ const GOOGLE_PUBKEY_N: &[u8] = &[171, 10, 243, 151, 78, 159, 192, 30, 142, 34, 1
 const GOOGLE_PUBKEY_E: &[u8] = &[1, 0, 1];
 
 pub fn exec(
-  _ctx: Context<VerifyJwt>,
+  _ctx: Context<VerifyProof>,
   header: Vec<u8>,
   payload: Vec<u8>,
   sig: Vec<u8>,
 ) -> Result<()> {
-  // We need to sha256 the following message <header>.<payload>
-  let mut msg = header;
-  msg.extend(b".");
-  msg.extend(payload);
-  
-  let mut hasher = Sha256::new();
-  hasher.update(&msg);
-  let msg_hash = hasher.finalize();
-
-  let google_pubkey = RSAPublicKey::new(
-    BigUint::from_bytes_le(GOOGLE_PUBKEY_N),
-    BigUint::from_bytes_le(GOOGLE_PUBKEY_E),
-  ).map_err(|_| ErrorCode::RsaError)?;
-
-  google_pubkey.verify(
-    rsa::PaddingScheme::PKCS1v15Sign {hash: Some(Hash::SHA2_256)},
-    &msg_hash,
-    &sig
-  ).map_err(|_| ErrorCode::RsaError)?;
-
   Ok(())
 }

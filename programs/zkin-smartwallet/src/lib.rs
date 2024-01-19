@@ -8,7 +8,7 @@ use anchor_lang::prelude::*;
 use crate::{
   processors::create_wallet::NR_INPUTS,
   instructions::{
-    create_wallet::*, verify_jwt::*,
+    create_wallet::*, verify_proof::*,
   },
 };
 
@@ -30,11 +30,11 @@ pub mod zkin_smartwallet {
   }
 
   pub fn verify_jwt(
-    ctx: Context<VerifyJwt>,
+    ctx: Context<VerifyProof>,
     header: Vec<u8>,
     payload: Vec<u8>,
     sig: Vec<u8>,
   ) -> Result<()> {
-    processors::verify_jwt::exec(ctx, header, payload, sig)
+    processors::verify_proof::exec(ctx, header, payload, sig)
   }
 }
