@@ -963,8 +963,8 @@ dependencies = [
 [[package]]
 name = "groth16-solana"
 version = "0.0.2"
-source = "git+https://github.com/Lightprotocol/groth16-solana?rev=d1165a0#d1165a03aed6150576c38160797c9f9a1ae630a1"
 dependencies = [
+ "anchor-lang",
  "ark-bn254",
  "ark-ec",
  "ark-ff",
