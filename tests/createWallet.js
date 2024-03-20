@@ -36,7 +36,6 @@ describe("Create wallet", () => {
     const proofA = Array.from(g1Uncompressed(curve, proofProc.pi_a));
     const proofB = Array.from(g2Uncompressed(curve, proofProc.pi_b));
     const proofC = Array.from(g1Uncompressed(curve, proofProc.pi_c));
-    const walletAddress = "C32Ad3bkok1cJ";
 
     // replace the big int values of address and modulo with the [u8; 32] which is the hex encoded value in bytes
     publicSignals.splice(

@@ -19,6 +19,8 @@ pub mod zkin_smartwallet {
   /// 
   /// * `ctx` - The Anchor context holding the accounts
   /// * `wallet_address` - This is a deterministic address which is `address = H(sub|iss|aud|salt)` where H = Poseidon
+  /// It's a hex encoded bytes value. It should be part of the public_inputs_vec as well. But we pass it one more time as
+  /// a separate param so we can easily create the wallet PDA which the wallet_address is the seed of.
   /// * `proof_a` - Part of the ZKP
   /// * `proof_b` - Part of the ZKP
   /// * `proof_c` - Part of the ZKP
@@ -27,6 +29,7 @@ pub mod zkin_smartwallet {
   /// Note the wallet address and the rsa_modulo which are hex encoded values
   pub fn create_wallet(
     ctx: Context<CreateWallet>,
+    _wallet_address: [u8; 32],
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],

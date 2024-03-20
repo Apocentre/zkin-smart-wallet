@@ -6,6 +6,6 @@ const utf8 = anchor.utils.bytes.utf8;
 export const state = () => Keypair.generate()
 
 export const wallet = (walletAddress, programId) => PublicKey.findProgramAddressSync(
-  [utf8.encode(walletAddress)],
+  [Buffer.from(walletAddress)],
   programId
 )

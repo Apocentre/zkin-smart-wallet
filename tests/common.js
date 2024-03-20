@@ -4,15 +4,15 @@ import * as accounts from "./helpers/accounts.js";
 const {SystemProgram} = anchor.web3
 
 export const createWallet = async (proofA, proofB, proofC, pubInputs) => {
-  console.log(">>>>>>>", pubInputs)
-  const walletAddress = pubInputs.slice(244, 32);
+  const walletAddress = pubInputs.slice(244, 276);
+  console.log("wallet >>>>>>", walletAddress)
   const provider = anchor.AnchorProvider.local();
   const program = anchor.workspace.ZkinSmartwallet;
   const owner = provider.wallet.payer;
   const wallet = accounts.wallet(walletAddress, program.programId)[0];
 
   const ix = await program.methods
-  .createWallet(proofA, proofB, proofC, pubInputs)
+  .createWallet(walletAddress, proofA, proofB, proofC, pubInputs)
   .accounts({
     wallet,
     owner: owner.publicKey,
