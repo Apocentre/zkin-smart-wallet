@@ -9,6 +9,8 @@ export const createWallet = async (walletAddress, proofA, proofB, proofC, pubInp
   const owner = provider.wallet.payer;
   const wallet = accounts.wallet(walletAddress, program.programId)[0];
 
+  // console.log(">>>>>>>>", walletAddress, proofA, proofB, proofC, pubInputs)
+
   const ix = await program.methods
   .createWallet(walletAddress, proofA, proofB, proofC, pubInputs)
   .accounts({
