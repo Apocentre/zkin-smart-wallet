@@ -1,6 +1,6 @@
 use groth16_solana::groth16::Groth16Verifyingkey;
 
-pub const _VERIFYING_KEY: Groth16Verifyingkey =  Groth16Verifyingkey {
+pub const VERIFYING_KEY: Groth16Verifyingkey =  Groth16Verifyingkey {
 	nr_pubinputs: 247,
 
 	vk_alpha_g1: [
