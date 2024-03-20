@@ -5,11 +5,10 @@ use anchor_lang::prelude::*;
 // };
 
 pub fn verify_proof(
-  _wallet_address: &str,
   _proof_a: [u8; 64],
   _proof_b: [u8; 128],
   _proof_c: [u8; 64],
-  _public_inputs_vec: [u8; 244],
+  _public_inputs_vec: [u8; 308],
 ) -> Result<()> {
   // TODO: Extract each public input to a separate variable
   

@@ -22,27 +22,21 @@ pub mod zkin_smartwallet {
   /// * `proof_a` - Part of the ZKP
   /// * `proof_b` - Part of the ZKP
   /// * `proof_c` - Part of the ZKP
-  /// * `public_inputs_vec` - All public inputs except for address and rsa_modulus which are passed separately
-  /// * `address` - The 
+  /// * `public_inputs_vec` - All public inputs to the circuit. The len is calculated as so:
+  /// iss_out + aud_out + nonce_out + exp_out + wallet_address + rsa_modulo = 78 + 78 + 78 + 10 + 32 + 32
   pub fn create_wallet(
     ctx: Context<CreateWallet>,
-    wallet_address: String,
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],
-    public_inputs_vec: [u8; 244],
-    address: Vec<[u8; 32]>,
-    rsa_modulus: Vec<[u8; 32]>,
+    public_inputs_vec: [u8; 308],
   ) -> Result<()> {
     processors::create_wallet::exec(
       ctx,
-      wallet_address,
       proof_a,
       proof_b,
       proof_c,
       public_inputs_vec,
-      address,
-      rsa_modulus,
     )
   }
 }
