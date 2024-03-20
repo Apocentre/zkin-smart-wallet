@@ -10,6 +10,4 @@ pub enum ErrorCode {
   GrothVerificationError,
   #[msg("Invalid idToken")]
   InvalidIdToken,
-  #[msg("Invalid wallet address")]
-  InvalidWalletAddress,
 }
