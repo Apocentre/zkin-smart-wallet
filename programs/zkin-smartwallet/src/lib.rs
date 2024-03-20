@@ -24,6 +24,7 @@ pub mod zkin_smartwallet {
   /// * `proof_c` - Part of the ZKP
   /// * `public_inputs_vec` - All public inputs to the circuit. The len is calculated as so:
   /// iss_out + aud_out + nonce_out + exp_out + wallet_address + rsa_modulo = 78 + 78 + 78 + 10 + 32 + 32
+  /// Note the wallet address and the rsa_modulo which are hex encoded values
   pub fn create_wallet(
     ctx: Context<CreateWallet>,
     proof_a: [u8; 64],
