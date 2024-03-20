@@ -46,7 +46,7 @@ describe("Create wallet", () => {
       ...to32ByteBuffer(publicSignals[publicSignals.length - 1]),
     )
 
-    await createWallet(walletAddress, proofA, proofB, proofC, publicSignals);
+    await createWallet(proofA, proofB, proofC, publicSignals);
   })
 });
 
