@@ -20,7 +20,6 @@ describe("Create wallet", () => {
     const proofB = Array.from(g2Uncompressed(curve, proofProc.pi_b));
     const proofC = Array.from(g1Uncompressed(curve, proofProc.pi_c));
 
-    // console.log("before >>>> ", JSON.stringify(publicSignals));
     // replace the big int values of address and modulo with the [u8; 32] which is the hex encoded value in bytes
     publicSignals.splice(
       244,
@@ -28,8 +27,6 @@ describe("Create wallet", () => {
       ...to32ByteBuffer(publicSignals[publicSignals.length - 2]),
       ...to32ByteBuffer(publicSignals[publicSignals.length - 1]),
     )
-
-    // console.log("after >>>> ", JSON.stringify(publicSignals));
 
     await createWallet(proofA, proofB, proofC, publicSignals);
   })

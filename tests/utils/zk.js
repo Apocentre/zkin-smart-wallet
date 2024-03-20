@@ -14,9 +14,5 @@ export const g2Uncompressed = (curve, p2Raw) => {
   return Buffer.from(buff);
 }
 
-export const toHex64Padded = val => {
-  const hexValue = BigInt(val).toString(16).padStart(64, "0");
-  console.log("hexValue: ", hexValue);
-  return hexValue;
-}
+export const toHex64Padded = val => BigInt(val).toString(16).padStart(64, "0");
 export const to32ByteBuffer = val => Buffer.from(toHex64Padded(val), "hex");

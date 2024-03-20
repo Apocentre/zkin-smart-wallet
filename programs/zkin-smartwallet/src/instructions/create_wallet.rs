@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
-use std::mem::size_of;
-use crate::account_data::wallet::Wallet;
+use crate::account_data::wallet::{wallet_size, Wallet};
 
 #[derive(Accounts)]
 #[instruction(wallet_address: [u8; 32])]
@@ -9,7 +8,7 @@ pub struct CreateWallet<'info> {
   #[account(
     init,
     payer = owner,
-    space = 8 + size_of::<Wallet>(),
+    space = wallet_size(),
     seeds = [wallet_address.as_ref()],
     bump,
   )]

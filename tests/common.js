@@ -5,7 +5,6 @@ const {SystemProgram} = anchor.web3
 
 export const createWallet = async (proofA, proofB, proofC, pubInputs) => {
   const walletAddress = pubInputs.slice(244, 276);
-  console.log("wallet >>>>>>", walletAddress)
   const provider = anchor.AnchorProvider.local();
   const program = anchor.workspace.ZkinSmartwallet;
   const owner = provider.wallet.payer;
