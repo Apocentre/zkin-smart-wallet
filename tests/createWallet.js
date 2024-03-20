@@ -24,17 +24,13 @@ const g2Uncompressed = (curve, p2Raw) => {
   return Buffer.from(buff);
 }
 
-const to32ByteBuffer = val => {
-  const hexString = BigInt(val).toString(16).padStart(64, "0");
-  const buffer = Buffer.from(hexString, "hex");
-  return buffer; 
-}
+const toHex64Padded = val => BigInt(val).toString(16).padStart(64, "0");
+const to32ByteBuffer = val => Buffer.from(toHex64Padded(val), "hex");
 
 describe("Create wallet", () => {  
   it("should create a new wallet", async () => {  
     const curve = await buildBn128();
     const proofProc = unstringifyBigInts(proof);
-    // publicSignals = unstringifyBigInts(publicSignals)
 
     // Tranform data to the correct shape and format
     const proofA = Array.from(g1Uncompressed(curve, proofProc.pi_a));
@@ -42,7 +38,13 @@ describe("Create wallet", () => {
     const proofC = Array.from(g1Uncompressed(curve, proofProc.pi_c));
     const walletAddress = "C32Ad3bkok1cJ";
 
-    console.log("address =>>>>", toHex(publicSignals[publicSignals.length - 2]));
+    // replace the big int values of address and modulo with the [u8; 32] which is the hex encoded value in bytes
+    publicSignals.splice(
+      244,
+      153,
+      ...to32ByteBuffer(publicSignals[publicSignals.length - 2]),
+      ...to32ByteBuffer(publicSignals[publicSignals.length - 1]),
+    )
 
     await createWallet(walletAddress, proofA, proofB, proofC, publicSignals);
   })
