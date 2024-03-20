@@ -9,7 +9,7 @@ pub fn exec(
   proof_a: [u8; 64],
   proof_b: [u8; 128],
   proof_c: [u8; 64],
-  public_inputs_vec: Vec<u8>,
+  public_inputs_vec: [u8; 246],
 ) -> Result<()> {
   verify_proof(
     &wallet_address,

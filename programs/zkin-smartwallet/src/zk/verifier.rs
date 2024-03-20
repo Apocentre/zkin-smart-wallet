@@ -1,15 +1,15 @@
 use anchor_lang::prelude::*;
-use groth16_solana::groth16::Groth16Verifier;
-use crate::{
-  zk::verifying_key::VERIFYING_KEY, program_error::ErrorCode,
-};
+// use groth16_solana::groth16::Groth16Verifier;
+// use crate::{
+//   zk::verifying_key::VERIFYING_KEY, program_error::ErrorCode,
+// };
 
 pub fn verify_proof(
-  wallet_address: &str,
-  proof_a: [u8; 64],
-  proof_b: [u8; 128],
-  proof_c: [u8; 64],
-  public_inputs_vec: Vec<u8>,
+  _wallet_address: &str,
+  _proof_a: [u8; 64],
+  _proof_b: [u8; 128],
+  _proof_c: [u8; 64],
+  _public_inputs_vec: [u8; 246],
 ) -> Result<()> {
   // TODO: Extract each public input to a separate variable
   

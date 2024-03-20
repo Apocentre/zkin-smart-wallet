@@ -19,7 +19,7 @@ pub mod zkin_smartwallet {
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],
-    public_inputs_vec: Vec<u8>,
+    public_inputs_vec: [u8; 246],
   ) -> Result<()> {
     processors::create_wallet::exec(ctx, wallet_address, proof_a, proof_b, proof_c, public_inputs_vec)
   }

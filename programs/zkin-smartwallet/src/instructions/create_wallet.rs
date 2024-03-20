@@ -10,7 +10,7 @@ pub struct CreateWallet<'info> {
     init,
     payer = owner,
     space = 8 + size_of::<Wallet>(),
-    seeds = [b"zkin_wallet", wallet_address.as_bytes().as_ref()],
+    seeds = [wallet_address.as_bytes().as_ref()],
     bump,
   )]
   pub wallet: Account<'info, Wallet>,

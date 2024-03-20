@@ -1,6 +1,5 @@
 import * as anchor from "@coral-xyz/anchor";
-import Web3 from "@apocentre/solana-web3";
-import {createAndSendV0Tx} from "./utils/tx.js"
+import {createWallet} from "./common.js"
 import {buildBn128, utils} from "ffjavascript";
 import {expect} from "./utils/solana-chai.js";
 
@@ -38,51 +37,19 @@ const to32ByteBuffer = (num) => {
   return result;
 }
 
-describe("Verify JWT", () => {  
-  it("should verify", async () => {
-    const provider = anchor.AnchorProvider.local();
-    const program = anchor.workspace.ZkinSmartwallet;
-    const user = provider.wallet.payer;
-  
+describe("Create wallet", () => {  
+  it("should create a new wallet", async () => {  
     const curve = await buildBn128();
     const proofProc = unstringifyBigInts(proof);
     publicSignals = unstringifyBigInts(publicSignals)
 
     // Tranform data to the correct shape and format
-    const pi_a = g1Uncompressed(curve, proofProc.pi_a);
-    const pi_a_0_u8_array = Array.from(pi_a);
-    console.log(pi_a_0_u8_array.length);
+    const proofA = Array.from(g1Uncompressed(curve, proofProc.pi_a));
+    const proofB = Array.from(g2Uncompressed(curve, proofProc.pi_b));
+    const proofC = Array.from(g1Uncompressed(curve, proofProc.pi_c));
+    const walletAddress = "C32Ad3bkok1cJ";
 
-    const pi_b = g2Uncompressed(curve, proofProc.pi_b);
-    const pi_b_0_u8_array = Array.from(pi_b);
-    console.log(pi_b_0_u8_array.length);
-
-    const pi_c = g1Uncompressed(curve, proofProc.pi_c);
-    const pi_c_0_u8_array = Array.from(pi_c);
-    console.log(pi_c_0_u8_array.length);
-
-    const pubInputs = [];
-    for (let i = 0; i < publicSignals.length - 1; i++) {
-      pubInputs[i] =  Array.from(to32ByteBuffer(BigInt(publicSignals[i])));
-    }
-    console.log(pubInputs);
-
-  //   const ix = await program.methods
-  //   .verifyJwt(header, payload, sig)
-  //   .accounts({
-  //     user: user.publicKey,
-  //   })
-  //   .instruction();
-  
-  //   const web3 = Web3(user.publicKey)
-  //   // TODO: unfortunately the current on-chain RSA verify exceed the MAX compute budget
-  //   const cbIx = web3.getComputationBudgetIx(1_000_000);
-  //   await createAndSendV0Tx(
-  //     provider,
-  //     [cbIx, ix],
-  //     user.publicKey,
-  //     [user]
-  //   );
+    await createWallet(walletAddress, proofA, proofB, proofC, publicSignals);
   })
 });
 
