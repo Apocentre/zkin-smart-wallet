@@ -29,22 +29,6 @@ fn convert_public_inputs(public_inputs: [u8; 308]) -> Box<[[u8; 32]; 246]> {
   result
 }
 
-// fn convert_public_inputs<'a>(public_inputs: [u8; 308]) -> Vec<Vec<u8>> {
-//   let mut result = Vec::new();
-
-//   for val in &public_inputs[..244] {
-//     let item = hex::encode([*val]);
-//     result.push(item.as_bytes().to_vec());
-//   }
-
-//   // address is already a 32 bytes hex value
-//   result.push(public_inputs[244..276].to_vec());
-//   // so is rsa_modulo
-//   result.push(public_inputs[276..308].to_vec());
-
-//   result
-// }
-
 pub fn verify_proof(
   proof_a: [u8; 64],
   proof_b: [u8; 128],
