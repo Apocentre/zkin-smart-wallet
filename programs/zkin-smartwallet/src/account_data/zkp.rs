@@ -1,11 +1,6 @@
-use std::io::Write;
 use anchor_lang::prelude::*;
 
 pub const PUBLIC_INPUTS_LEN: usize = 308;
-
-fn pad_value(mut bytes: &mut [u8], s: &str) {
-  bytes.write(s.as_bytes()).unwrap();
-}
 
 #[account]
 pub struct Zkp {
@@ -62,8 +57,7 @@ impl Zkp {
     let mut iterate = |start: usize, end: usize| {
       for val in self.public_inputs[start..end].iter() {
         let mut bytes = [0; 32];
-        let item = hex::encode([*val]);
-        pad_value(&mut bytes, &item);
+        bytes[31] = *val;
     
         result.push(bytes);
       }
