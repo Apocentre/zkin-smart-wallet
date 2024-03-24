@@ -28,7 +28,10 @@ pub fn verify_proof(zkp: &Zkp) -> Result<()> {
     &VERIFYING_KEY,
   ).map_err(|_| ErrorCode::InvalidProofData)?;
   
-  verifier.verify().map_err(|_| ErrorCode::GrothVerificationError)?;
+  verifier.verify().map_err(|err| {
+    msg!(">>>>>>>>>>>>>>>>>>>>> {:?}", err);
+    ErrorCode::GrothVerificationError
+  })?;
 
   Ok(())
 }

@@ -17,7 +17,7 @@ export const createWallet = async (proofA, proofB, proofC, pubInputs) => {
   const wallet = accounts.wallet(walletAddress, program.programId)[0];
   const zkp = accounts.zkp(walletAddress, program.programId)[0];
 
-  // we use 7 instruction to run this transaction
+  // we use 5 instruction to run the first transaction and 2 instructions to run the second
   const initZkpIx = await program.methods
   .initZkp(walletAddress, proofA, proofB, proofC, pubInputs, new BN(BATCH_SIZE))
   .accounts({
@@ -27,9 +27,28 @@ export const createWallet = async (proofA, proofB, proofC, pubInputs) => {
   })
   .instruction();
 
-  const prepareZkpIxs = [];
+  let prepareZkpIxs = [];
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 3; i++) {
+    const ix = await program.methods
+    .prepareZkp(walletAddress)
+    .accounts({zkp})
+    .instruction();
+
+    prepareZkpIxs.push(ix);
+  }
+
+
+  let cbIx = web3.getComputationBudgetIx(1_000_000);
+  await createAndSendV0Tx(
+    provider,
+    [cbIx, initZkpIx, ...prepareZkpIxs],
+    owner.publicKey,
+    [owner]
+  );
+
+  prepareZkpIxs = [];
+  for (let i = 0; i < 2; i++) {
     const ix = await program.methods
     .prepareZkp(walletAddress)
     .accounts({zkp})
@@ -48,11 +67,10 @@ export const createWallet = async (proofA, proofB, proofC, pubInputs) => {
   })
   .instruction();
 
-  const cbIx = web3.getComputationBudgetIx(1_400_000);
-
+  cbIx = web3.getComputationBudgetIx(1_000_000);
   await createAndSendV0Tx(
     provider,
-    [cbIx, initZkpIx, ...prepareZkpIxs, createWalletIx],
+    [cbIx, ...prepareZkpIxs, createWalletIx],
     owner.publicKey,
     [owner]
   );
