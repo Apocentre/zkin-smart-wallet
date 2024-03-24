@@ -964,7 +964,6 @@ dependencies = [
 name = "groth16-solana"
 version = "0.0.2"
 dependencies = [
- "anchor-lang",
  "ark-bn254",
  "ark-ec",
  "ark-ff",
