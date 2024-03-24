@@ -30,11 +30,6 @@ describe("Create wallet", () => {
       ...to32ByteBuffer(publicSignals[publicSignals.length - 1]),
     )
 
-    for (let i = 0; i < 50; i++) {
-      console.log(Array.from(to32ByteBuffer(publicSignals[i])))
-      
-    }
-
     await createWallet(proofA, proofB, proofC, publicSignals);
   })
 });

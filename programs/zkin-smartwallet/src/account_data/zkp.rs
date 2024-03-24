@@ -58,10 +58,10 @@ impl Zkp {
       for val in self.public_inputs[start..end].iter() {
         let mut bytes = [0; 32];
         bytes[31] = *val;
-    
         result.push(bytes);
       }
     };
+
 
     if end > 244 {
       iterate(start, 244);
