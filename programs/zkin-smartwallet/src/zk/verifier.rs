@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use groth16_solana::groth16;
+use groth16_solana::groth16::{self, Groth16Verifier};
 use crate::{
   account_data::zkp::Zkp, program_error::ErrorCode, zk::verifying_key::VERIFYING_KEY
 };
@@ -19,23 +19,16 @@ pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
 }
 
 
-// pub fn verify_proof(
-//   proof_a: [u8; 64],
-//   proof_b: [u8; 128],
-//   proof_c: [u8; 64],
-//   public_inputs: [u8; 308],
-// ) -> Result<()> {
-//   let pub_inputs = convert_public_inputs(public_inputs);
-
-//   let mut verifier = Groth16Verifier::<246>::new(
-//     &proof_a,
-//     &proof_b,
-//     &proof_c,
-//     &pub_inputs,
-//     &VERIFYING_KEY,
-//   ).map_err(|_| ErrorCode::InvalidProofData)?;
+pub fn verify_proof(zkp: &Zkp) -> Result<()> {
+  let mut verifier = Groth16Verifier::new(
+    &zkp.proof_a,
+    &zkp.proof_b,
+    &zkp.proof_c,
+    zkp.prepared_public_inputs.unwrap(),
+    &VERIFYING_KEY,
+  ).map_err(|_| ErrorCode::InvalidProofData)?;
   
-//   verifier.verify().map_err(|_| ErrorCode::GrothVerificationError)?;
+  verifier.verify().map_err(|_| ErrorCode::GrothVerificationError)?;
 
-//   Ok(())
-// }
+  Ok(())
+}

@@ -6,6 +6,7 @@ use crate::account_data::zkp::Zkp;
 pub struct PrepareZkp<'info> {
   /// CHECK: The PDA that represent the ZKP data
   #[account(
+    mut,
     seeds = [b"zkp", wallet_address.as_ref()],
     bump = zkp.bump,
   )]
