@@ -11,9 +11,6 @@ pub fn exec(
   public_inputs: [u8; PUBLIC_INPUTS_LEN],
   batch_size: u8,
 ) -> Result<()> {
-  let wallet_address = &public_inputs[244..276];
-  let wallet_address = hex::encode(wallet_address);
-
   // update wallet state
   let zkp = &mut ctx.accounts.zkp;
   **zkp = Zkp::new(

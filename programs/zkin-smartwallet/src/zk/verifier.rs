@@ -1,44 +1,22 @@
-use std::io::Write;
 use anchor_lang::prelude::*;
-use groth16_solana::groth16::{self, Groth16Verifier};
+use groth16_solana::groth16;
 use crate::{
   account_data::zkp::Zkp, program_error::ErrorCode, zk::verifying_key::VERIFYING_KEY
 };
 
-fn pad_value(mut bytes: &mut [u8], s: &str) {
-  bytes.write(s.as_bytes()).unwrap();
+pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
+  let prepared_public_inputs = groth16::prepare_inputs(
+    &VERIFYING_KEY,
+    zkp.prepared_public_inputs,
+    zkp.convert_public_inputs(),
+    zkp.offset(),
+  ).map_err(|_| ErrorCode::InvalidProofData)?;
+
+  zkp.prepared_public_inputs = Some(prepared_public_inputs);
+  zkp.next_iteration();
+
+  Ok(())
 }
-
-// Convert public inputs slice to array of [u8; 32]. Each u8 becomes [u8; 32]
-// fn convert_public_inputs(zkp: &Zkp) -> Vec<[u8; 32]> {
-//   let mut result = Vec::new();
-
-//   for (i, val) in public_inputs[..244].iter().enumerate() {
-//     let mut bytes = [0; 32];
-//     let item = hex::encode([*val]);
-//     pad_value(&mut bytes, &item);
-
-//     result[i] = bytes;
-//   }
-
-//   // address is already a 32 bytes hex value
-//   result[244] = public_inputs[244..276].try_into().unwrap();
-//   // so is rsa_modulo
-//   result[245] = public_inputs[276..308].try_into().unwrap();
-
-//   result
-// }
-
-// pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
-//   groth16::prepare_inputs(
-//     &VERIFYING_KEY,
-//     zkp.prepared_public_inputs,
-//     zkp.public_inputs,
-//     zkp.offset,
-//   );
-
-//   Ok(())
-// }
 
 
 // pub fn verify_proof(

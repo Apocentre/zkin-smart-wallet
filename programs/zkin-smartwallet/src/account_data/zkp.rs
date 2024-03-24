@@ -56,7 +56,7 @@ impl Zkp {
   /// It will convert only the section of the public inputs that is relevant for the current iteration.
   pub fn convert_public_inputs(&self) -> Vec<[u8; 32]> {
     let mut result = Vec::new();
-    let start = (self.batch_size * self.iteration) as usize;
+    let start = self.offset();
     let end = start + self.batch_size as usize;
 
     let mut iterate = |start: usize, end: usize| {
@@ -81,6 +81,10 @@ impl Zkp {
     }
 
     result
+  }
+
+  pub fn offset(&self) -> usize {
+    (self.batch_size * self.iteration) as usize
   }
 
   pub fn next_iteration(&mut self) {

@@ -6,7 +6,7 @@ mod program_error;
 
 use anchor_lang::prelude::*;
 use crate::instructions::{
-  create_wallet::*, init_zkp::*,
+  create_wallet::*, init_zkp::*, prepare_zkp::*,
 };
 
 declare_id!("zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy");
@@ -21,22 +21,7 @@ pub mod zkin_smartwallet {
   /// 
   /// * `ctx` - The Anchor context holding the accounts
   /// * `wallet_address` - This is a deterministic address which is `address = H(sub|iss|aud|salt)` where H = Poseidon
-  /// It's a hex encoded bytes value. It should be part of the public_inputs_vec as well. But we pass it one more time as
-  /// a separate param so we can easily create the wallet PDA which the wallet_address is the seed of.
-  /// * `proof_a` - Part of the ZKP
-  /// * `proof_b` - Part of the ZKP
-  /// * `proof_c` - Part of the ZKP
-  /// * `public_inputs_vec` - All public inputs to the circuit. The len is calculated as so:
-  /// iss_out + aud_out + nonce_out + exp_out + wallet_address + rsa_modulo = 78 + 78 + 78 + 10 + 32 + 32
-  /// Note the wallet address and the rsa_modulo which are hex encoded values
-  pub fn create_wallet(
-    ctx: Context<CreateWallet>,
-    wallet_address: [u8; 32],
-    proof_a: [u8; 64],
-    proof_b: [u8; 128],
-    proof_c: [u8; 64],
-    public_inputs_vec: [u8; 308],
-  ) -> Result<()> {
+  pub fn create_wallet(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
     processors::create_wallet::exec(ctx, wallet_address)
   }
 
@@ -78,5 +63,14 @@ pub mod zkin_smartwallet {
       public_inputs_vec,
       batch_size,
     )
+  }
+
+  /// Runs each iteration of the public input procesing. The concept is described in the documentation of `init_zkp` above
+  /// 
+  /// # Arguments
+  /// 
+  /// * `ctx` - The Anchor context holding the accounts
+  pub fn prepare_zkp(ctx: Context<PrepareZkp>) -> Result<()> {
+    processors::prepare_zkp::exec(ctx)
   }
 }
