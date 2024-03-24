@@ -1,7 +1,9 @@
 import * as anchor from "@coral-xyz/anchor";
 import {buildBn128, utils} from "ffjavascript";
 import {createWallet} from "./common.js";
-import {g1Uncompressed, g2Uncompressed, to32ByteBuffer} from "./utils/zk.js";
+import {
+  g1Uncompressed, g2Uncompressed, to32ByteBuffer,
+} from "./utils/zk.js";
 import {expect} from "./utils/solana-chai.js";
 
 const {unstringifyBigInts} = utils;
@@ -16,9 +18,9 @@ describe("Create wallet", () => {
     const proofProc = unstringifyBigInts(proof);
 
     // Tranform data to the correct shape and format
-    const proofA = Array.from(g1Uncompressed(curve, proofProc.pi_a));
-    const proofB = Array.from(g2Uncompressed(curve, proofProc.pi_b));
-    const proofC = Array.from(g1Uncompressed(curve, proofProc.pi_c));
+    const proofA = g1Uncompressed(curve, proofProc.pi_a);
+    const proofB = g2Uncompressed(curve, proofProc.pi_b);
+    const proofC = g1Uncompressed(curve, proofProc.pi_c);
 
     // replace the big int values of address and modulo with the [u8; 32] which is the hex encoded value in bytes
     publicSignals.splice(
