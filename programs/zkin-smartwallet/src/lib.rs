@@ -31,19 +31,13 @@ pub mod zkin_smartwallet {
   /// Note the wallet address and the rsa_modulo which are hex encoded values
   pub fn create_wallet(
     ctx: Context<CreateWallet>,
-    _wallet_address: [u8; 32],
+    wallet_address: [u8; 32],
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],
     public_inputs_vec: [u8; 308],
   ) -> Result<()> {
-    processors::create_wallet::exec(
-      ctx,
-      proof_a,
-      proof_b,
-      proof_c,
-      public_inputs_vec,
-    )
+    processors::create_wallet::exec(ctx, wallet_address)
   }
 
   /// Currently the Solana runtime has heap size limit of 32Kb per transaction. Our public inputs have a length
@@ -74,6 +68,7 @@ pub mod zkin_smartwallet {
     proof_b: [u8; 128],
     proof_c: [u8; 64],
     public_inputs_vec: [u8; 308],
+    batch_size: u8,
   ) -> Result<()> {
     processors::init_zkp::exec(
       ctx,
@@ -81,6 +76,7 @@ pub mod zkin_smartwallet {
       proof_b,
       proof_c,
       public_inputs_vec,
+      batch_size,
     )
   }
 }
