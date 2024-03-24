@@ -15,16 +15,6 @@ declare_id!("zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy");
 pub mod zkin_smartwallet {
   use super::*;
 
-  /// Allows anyone to provide a valid ZKP and create a new smart wallet
-  ///
-  /// # Arguments
-  /// 
-  /// * `ctx` - The Anchor context holding the accounts
-  /// * `wallet_address` - This is a deterministic address which is `address = H(sub|iss|aud|salt)` where H = Poseidon
-  pub fn create_wallet(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
-    processors::create_wallet::exec(ctx, wallet_address)
-  }
-
   /// Currently the Solana runtime has heap size limit of 32Kb per transaction. Our public inputs have a length
   /// of 244 bytes which are converted into a Circo Field and each byte becomes [u8; 32]. The Groth16 verifier
   /// use `alt_bn128`` to verify the ZKP. That library uses vectors and allocates more that 32 KB of heap memory.
@@ -43,7 +33,7 @@ pub mod zkin_smartwallet {
   /// * `proof_a` - Part of the ZKP
   /// * `proof_b` - Part of the ZKP
   /// * `proof_c` - Part of the ZKP
-  /// * `public_inputs_vec` - All public inputs to the circuit. The len is calculated as so:
+  /// * `public_inputs` - All public inputs to the circuit. The len is calculated as so:
   /// iss_out + aud_out + nonce_out + exp_out + wallet_address + rsa_modulo = 78 + 78 + 78 + 10 + 32 + 32
   /// Note the wallet address and the rsa_modulo which are hex encoded values
   pub fn init_zkp(
@@ -52,7 +42,7 @@ pub mod zkin_smartwallet {
     proof_a: [u8; 64],
     proof_b: [u8; 128],
     proof_c: [u8; 64],
-    public_inputs_vec: [u8; 308],
+    public_inputs: [u8; 308],
     batch_size: u8,
   ) -> Result<()> {
     processors::init_zkp::exec(
@@ -60,7 +50,7 @@ pub mod zkin_smartwallet {
       proof_a,
       proof_b,
       proof_c,
-      public_inputs_vec,
+      public_inputs,
       batch_size,
     )
   }
@@ -70,7 +60,17 @@ pub mod zkin_smartwallet {
   /// # Arguments
   /// 
   /// * `ctx` - The Anchor context holding the accounts
-  pub fn prepare_zkp(ctx: Context<PrepareZkp>) -> Result<()> {
+  pub fn prepare_zkp(ctx: Context<PrepareZkp>, _wallet_address: [u8; 32]) -> Result<()> {
     processors::prepare_zkp::exec(ctx)
+  }
+
+  /// Allows anyone to provide a valid ZKP and create a new smart wallet
+  ///
+  /// # Arguments
+  /// 
+  /// * `ctx` - The Anchor context holding the accounts
+  /// * `wallet_address` - This is a deterministic address which is `address = H(sub|iss|aud|salt)` where H = Poseidon
+  pub fn create_wallet(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
+    processors::create_wallet::exec(ctx, wallet_address)
   }
 }
