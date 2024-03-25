@@ -9,7 +9,7 @@ const {BN} = anchor.default;
 const BATCH_SIZE = 50;
 
 export const createWallet = async (proofA, proofB, proofC, pubInputs) => {
-  const walletAddress = pubInputs.slice(244, 276);
+  const walletAddress = pubInputs.slice(249, 281);
   const provider = anchor.AnchorProvider.local();
   const program = anchor.workspace.ZkinSmartwallet;
   const owner = provider.wallet.payer;

@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 
-pub const PUBLIC_INPUTS_LEN: usize = 308;
+pub const PUBLIC_INPUTS_LEN: usize = 313;
+pub const ADDRESS_START_INDEX: usize = 249;
 
 #[account]
 pub struct Zkp {
@@ -12,7 +13,7 @@ pub struct Zkp {
   pub proof_c: [u8; 64],
   /// The public inputs of the circuit. We use fixed size because we know what the
   /// len of the public inputs are for the ZkIn circuit.
-  /// note we have 246 inputs. The first 244 are in u8 which will then be converted to [u8; 32] to work with
+  /// note we have 251 inputs. The first 249 are in u8 which will then be converted to [u8; 32] to work with
   /// the Circom Field. The last two are already in [u8; 32] i.e. the address Poseidon hash and the rsa_modulo.
   /// We will split them into [u8; 32] in the processor
   pub public_inputs: [u8; PUBLIC_INPUTS_LEN],
@@ -62,13 +63,13 @@ impl Zkp {
       }
     };
 
-    if end > 244 {
-      iterate(start, 244);
+    if end > ADDRESS_START_INDEX {
+      iterate(start, ADDRESS_START_INDEX);
 
       // address is already a 32 bytes hex value
-      result.push(self.public_inputs[244..276].try_into().unwrap());
+      result.push(self.public_inputs[ADDRESS_START_INDEX..281].try_into().unwrap());
       // so is rsa_modulo
-      result.push(self.public_inputs[276..308].try_into().unwrap());
+      result.push(self.public_inputs[281..PUBLIC_INPUTS_LEN].try_into().unwrap());
     } else {
       iterate(start, end);
     }

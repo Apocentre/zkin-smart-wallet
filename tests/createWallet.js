@@ -23,7 +23,7 @@ describe("Create wallet", async () => {
 
     // replace the big int values of address and modulo with the [u8; 32] which is the hex encoded value in bytes
     publicSignals.splice(
-      244,
+      249,
       153,
       ...to32ByteBuffer(publicSignals[publicSignals.length - 2]),
       ...to32ByteBuffer(publicSignals[publicSignals.length - 1]),
