@@ -1,9 +1,8 @@
 import * as anchor from "@coral-xyz/anchor";
 import {buildBn128, utils} from "ffjavascript";
 import {createWallet} from "./common.js";
-import {
-  g1Uncompressed, g2Uncompressed, to32ByteBuffer,
-} from "./utils/zk.js";
+import {g1Uncompressed, g2Uncompressed, to32ByteBuffer} from "./utils/zk.js";
+import {convert_proof} from "zkin-crypto-wasm";
 import proof from "./proof.json" assert {type: "json"}
 import publicSignals from "./public.json" assert {type: "json"}
 import {expect} from "./utils/solana-chai.js";
@@ -17,7 +16,8 @@ describe("Create wallet", () => {
     const proofProc = unstringifyBigInts(proof);
 
     // Tranform data to the correct shape and format
-    const proofA = g1Uncompressed(curve, proofProc.pi_a);
+    let proofA = g1Uncompressed(curve, proofProc.pi_a);
+    proofA = convert_proof(proofA);
     const proofB = g2Uncompressed(curve, proofProc.pi_b);
     const proofC = g1Uncompressed(curve, proofProc.pi_c);
 
