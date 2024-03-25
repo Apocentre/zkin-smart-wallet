@@ -10,7 +10,7 @@ import {expect} from "./utils/solana-chai.js";
 
 const {unstringifyBigInts} = utils;
 
-describe("Create wallet", () => {  
+describe("Create wallet", async () => {  
   it("should create a new wallet", async () => {  
     const curve = await buildBn128();
     const proofProc = unstringifyBigInts(proof);
@@ -30,5 +30,7 @@ describe("Create wallet", () => {
     )
 
     await createWallet(proofA, proofB, proofC, publicSignals);
+
+    console.log(">>>>>>>>>>>>>>>>>>")
   })
 });

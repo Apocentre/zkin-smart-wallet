@@ -19,8 +19,3 @@ wallet = "./wallets/deployer.json"
 
 [scripts]
 test = "yarn run mocha -t 1000000 tests/**/*.js"
-
-[test]
-startup_wait = 10000
-shutdown_wait = 2000
-upgradeable = false
