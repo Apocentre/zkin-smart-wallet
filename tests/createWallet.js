@@ -30,7 +30,5 @@ describe("Create wallet", async () => {
     )
 
     await createWallet(proofA, proofB, proofC, publicSignals);
-
-    console.log(">>>>>>>>>>>>>>>>>>")
   })
 });
