@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "programs/*",
+  "zkin_crypto_wasm"
 ]
 
 resolver = "2"

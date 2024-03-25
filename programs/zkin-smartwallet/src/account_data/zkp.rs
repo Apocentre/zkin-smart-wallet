@@ -62,7 +62,6 @@ impl Zkp {
       }
     };
 
-
     if end > 244 {
       iterate(start, 244);
 
