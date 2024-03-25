@@ -1,23 +1,12 @@
 use anchor_lang::prelude::*;
 use crate::{
-  instructions::create_wallet::CreateWallet, zk::verifier::verify_proof,
+  instructions::create_wallet::CreateWallet, zk::verifier::verify_proof
 };
 
-pub fn exec(
-  ctx: Context<CreateWallet>,
-  wallet_address: String,
-  proof_a: [u8; 64],
-  proof_b: [u8; 128],
-  proof_c: [u8; 64],
-  public_inputs_vec: Vec<u8>,
-) -> Result<()> {
-  verify_proof(
-    &wallet_address,
-    proof_a,
-    proof_b,
-    proof_c,
-    public_inputs_vec,
-  )?;
+pub fn exec(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
+  let wallet_address = hex::encode(wallet_address);
+
+  verify_proof(&ctx.accounts.zkp)?;
 
   // update wallet state
   let wallet = &mut ctx.accounts.wallet;

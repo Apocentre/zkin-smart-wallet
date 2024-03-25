@@ -17,7 +17,7 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = "0.29.0"
-anchor-spl = "0.29.0"
+anchor-lang = { version = "0.29.0", features = ["init-if-needed"] }
 anchor-safe-math = "0.4.0"
-groth16-solana = { git = "https://github.com/Lightprotocol/groth16-solana", rev="d1165a0" }
+groth16-solana = { path = "../../../groth16-solana" }
+hex = "0.4.3"

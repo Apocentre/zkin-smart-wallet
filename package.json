@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
-    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
+    "build:crypto": "cd zkin_crypto_wasm && wasm-pack build --target nodejs"
   },
   "type": "module",
   "dependencies": {
@@ -12,6 +11,7 @@
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "ffjavascript": "^0.2.63",
-    "mocha": "^9.0.3"
+    "mocha": "^9.0.3",
+    "zkin-crypto-wasm": "file:./zkin_crypto_wasm/pkg"
   }
 }

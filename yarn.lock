@@ -3,14 +3,14 @@
 
 
 "@apocentre/solana-web3@Apocentre/solana-web3":
-  version "0.9.6"
-  resolved "https://codeload.github.com/Apocentre/solana-web3/tar.gz/0a44ebdac06b321b434444f05cb6cdcc03136bef"
+  version "0.10.3"
+  resolved "https://codeload.github.com/Apocentre/solana-web3/tar.gz/e50b43fb2cfa9c8bcedcee4c82a23c3da4b77c6e"
   dependencies:
     "@coral-xyz/anchor" "0.29.0"
     "@metaplex-foundation/mpl-token-metadata" "^3.1.2"
-    "@metaplex-foundation/umi" "^0.8.10"
+    "@metaplex-foundation/umi" "^0.9.0"
     "@ppoliani/im-record" "^2.0.0"
-    "@solana/spl-token" "^0.3.10"
+    "@solana/spl-token" "^0.3.11"
     bip39 "^3.1.0"
     number-to-bn "^1.7.0"
 
@@ -92,10 +92,10 @@
   dependencies:
     "@metaplex-foundation/umi-serializers-core" "^0.8.9"
 
-"@metaplex-foundation/umi-serializers@^0.8.9":
-  version "0.8.9"
-  resolved "https://registry.yarnpkg.com/@metaplex-foundation/umi-serializers/-/umi-serializers-0.8.9.tgz#af6c5bb1a3276cbe252fd08e359b305ed80a3343"
-  integrity sha512-Sve8Etm3zqvLSUfza+MYRkjTnCpiaAFT7VWdqeHzA3n58P0AfT3p74RrZwVt/UFkxI+ln8BslwBDJmwzcPkuHw==
+"@metaplex-foundation/umi-serializers@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/umi-serializers/-/umi-serializers-0.9.0.tgz#af6d03a3bf821bf73b7b3450bb8df0407f2f69d6"
+  integrity sha512-hAOW9Djl4w4ioKeR4erDZl5IG4iJdP0xA19ZomdaCbMhYAAmG/FEs5khh0uT2mq53/MnzWcXSUPoO8WBN4Q+Vg==
   dependencies:
     "@metaplex-foundation/umi-options" "^0.8.9"
     "@metaplex-foundation/umi-public-keys" "^0.8.9"
@@ -103,14 +103,14 @@
     "@metaplex-foundation/umi-serializers-encodings" "^0.8.9"
     "@metaplex-foundation/umi-serializers-numbers" "^0.8.9"
 
-"@metaplex-foundation/umi@^0.8.10":
-  version "0.8.10"
-  resolved "https://registry.yarnpkg.com/@metaplex-foundation/umi/-/umi-0.8.10.tgz#967b0c72eba3b941bafebf2bbb72eacc82cd83f3"
-  integrity sha512-iGuGIfJh2+YFvUIkZ0nB/69EsQcaoq89DDPRPYvPBtOunfv8TH8SNrwcsXHlp9aBtn5FGKCPx3V3X/eurB32Fg==
+"@metaplex-foundation/umi@^0.9.0":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/umi/-/umi-0.9.1.tgz#1eb581163f87f800bfa32fb58ce5cbe719d9d5b5"
+  integrity sha512-IhHoOvp4vfO/++YL+78+iVuLM53+FDwUOZDYgH6lx0jYXyQ27BeaieeR5i+q3A9dz4KxQo5Nzc5aCA1109QGCQ==
   dependencies:
     "@metaplex-foundation/umi-options" "^0.8.9"
     "@metaplex-foundation/umi-public-keys" "^0.8.9"
-    "@metaplex-foundation/umi-serializers" "^0.8.9"
+    "@metaplex-foundation/umi-serializers" "^0.9.0"
 
 "@noble/curves@^1.2.0":
   version "1.3.0"
@@ -194,7 +194,7 @@
     "@solana/options" "2.0.0-experimental.8618508"
     "@solana/spl-type-length-value" "0.1.0"
 
-"@solana/spl-token@^0.3.10":
+"@solana/spl-token@^0.3.11":
   version "0.3.11"
   resolved "https://registry.yarnpkg.com/@solana/spl-token/-/spl-token-0.3.11.tgz#cdc10f9472b29b39c8983c92592cadd06627fb9a"
   integrity sha512-bvohO3rIMSVL24Pb+I4EYTJ6cL82eFpInEXD/I8K8upOGjpqHsKUoAempR/RnUlI1qSFNyFlWJfu6MNUgfbCQQ==
@@ -1244,3 +1244,6 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+"zkin-crypto-wasm@file:./zkin_crypto_wasm/pkg":
+  version "0.1.0"
