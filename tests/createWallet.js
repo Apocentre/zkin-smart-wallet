@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 import {buildBn128, utils} from "ffjavascript";
-import {createWallet} from "./common.js";
+import {createWallet, setup} from "./common.js";
 import {g1Uncompressed, g2Uncompressed, to32ByteBuffer} from "./utils/zk.js";
 import {convert_proof} from "zkin-crypto-wasm";
 import proof from "./proof.json" assert {type: "json"}
@@ -10,7 +10,12 @@ import {expect} from "./utils/solana-chai.js";
 
 const {unstringifyBigInts} = utils;
 
-describe("Create wallet", async () => {  
+describe("Create wallet", () => {
+  let web3, operator;
+
+  beforeEach(async () => {
+    ([web3, operator] = await setup())
+  })
   it("should create a new wallet", async () => {  
     const curve = await buildBn128();
     const proofProc = unstringifyBigInts(proof);
@@ -29,6 +34,6 @@ describe("Create wallet", async () => {
       ...to32ByteBuffer(publicSignals[publicSignals.length - 1]),
     )
 
-    await createWallet(proofA, proofB, proofC, publicSignals);
+    await createWallet(web3, operator, proofA, proofB, proofC, publicSignals);
   })
 });

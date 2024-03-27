@@ -23,7 +23,7 @@ pub struct CreateWallet<'info> {
   )]
   pub zkp: Account<'info, Zkp>,
   
-  /// The operatora that partially signs the tx and pays for the gas
+  /// The operator that partially signs the tx and pays for the gas
   #[account(mut)]
   pub operator: Signer<'info>,
 
