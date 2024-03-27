@@ -9,7 +9,7 @@ pub struct CreateWallet<'info> {
   /// CHECK: The PDA that represent the actial wallet
   #[account(
     init,
-    payer = owner,
+    payer = operator,
     space = wallet_size(),
     seeds = [wallet_address.as_ref()],
     bump,
@@ -23,6 +23,12 @@ pub struct CreateWallet<'info> {
   )]
   pub zkp: Account<'info, Zkp>,
   
+  /// The operatora that partially signs the tx and pays for the gas
+  #[account(mut)]
+  pub operator: Signer<'info>,
+
+  /// The actual owner of the wallet that partially signs the tx but does not pay the gas fees
+  /// This must be the same as the `nonce` claim in the Zkp
   #[account(mut)]
   pub owner: Signer<'info>,
   
