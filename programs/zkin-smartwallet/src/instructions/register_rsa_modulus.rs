@@ -1,9 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::{
-  account_data::{
-    auth_provider::AuthProvider,
-    state::State
-  }, instruction, program_error::ErrorCode
+  account_data::{auth_provider::AuthProvider, state::State}, program_error::ErrorCode
 };
 
 #[derive(Accounts)]

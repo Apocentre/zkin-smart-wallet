@@ -23,4 +23,8 @@ impl AuthProvider {
       bump,
     }
   }
+
+  pub fn register_modulus(&mut self, modulus: [u8; 32]) {
+    todo!()
+  }
 }

@@ -9,6 +9,7 @@ use anchor_lang::prelude::*;
 use crate::{
   instructions::{
     create_wallet::*, init_zkp::*, prepare_zkp::*, initialize::*, update_operators::*,
+    register_rsa_modulus::*,
   },
   account_data::{
     zkp::PUBLIC_INPUTS_LEN, state::MAX_OPERATORS,
@@ -40,6 +41,17 @@ use super::*;
   /// * `operators` - The list of the new operators
   pub fn update_operators(ctx: Context<UpdateOperators>, operators: [Pubkey; MAX_OPERATORS]) -> Result<()> {
     processors::update_operators::exec(ctx, operators)
+  }
+
+  /// Registers a new RSA modulus for the given auth provider. The first time it's called it will create a new
+  /// AuthProvider PDA account.
+  ///
+  /// # Arguments
+  ///
+  /// * `ctx` - The Anchor context holding the accounts
+  /// * `operators` - The list of the new operators
+  pub fn register_rsa_modulus(ctx: Context<RegisterRsaModulus>, rsa_modulus: [u8; 32]) -> Result<()> {
+    processors::register_rsa_modulus::exec(ctx, rsa_modulus)
   }
 
   /// Currently the Solana runtime has heap size limit of 32Kb per transaction. Our public inputs have a length
