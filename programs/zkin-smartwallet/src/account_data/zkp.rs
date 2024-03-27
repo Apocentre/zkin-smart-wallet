@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 use crate::program_error::ErrorCode;
 
 pub const PUBLIC_INPUTS_LEN: usize = 313;
+pub const CLAIM_LEN: usize = 78;
 pub const ADDRESS_START_INDEX: usize = 249;
 
 #[account]
@@ -84,6 +85,27 @@ impl Zkp {
 
   pub fn next_iteration(&mut self) {
     self.iteration += 1;
+  }
+
+  /// Removes the 0s from the claim. Circuit inputs must have fixed size (e.g. 78 bytes for decoded claim)
+  /// but not all values have the same size which makes all claims padded with 0. This function removes the 0s.
+  fn trim(claim: &[u8]) -> Vec<u8> {
+    let mut result = Vec::new();
+
+    for v in claim.iter() {
+      if *v == 0 {
+        break;
+      }
+
+      result.push(*v)
+    }
+
+    result
+  }
+
+  pub fn iss(&self) -> Vec<u8> {
+    let iss: &[u8] = &self.public_inputs[0..CLAIM_LEN];
+    Self::trim(iss)
   }
 
   pub fn address(&self) -> Result<[u8; 32]> {

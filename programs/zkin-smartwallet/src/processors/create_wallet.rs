@@ -8,10 +8,10 @@ pub fn exec(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> 
 
   // TODO: make sure the rsa_modulo is registered under the iss claim. We need to have a state account
   // that store the rsa pubkeys of the auth providers (iss) we support.
-  // Basically, require!(state.belogs_to_provider())
+  // Basically, require!(state.belongs_to_provider(&ctx.accounts.zkp))
 
-  verify_proof(&ctx.accounts.zkp)?;
-
+  let zkp = &ctx.accounts.zkp;
+  verify_proof(zkp)?;
 
   // update wallet state
   let wallet = &mut ctx.accounts.wallet;
