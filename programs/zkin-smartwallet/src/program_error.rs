@@ -8,6 +8,6 @@ pub enum ErrorCode {
   InvalidProofData,
   #[msg("Groth verification error")]
   GrothVerificationError,
-  #[msg("Invalid idToken")]
-  InvalidIdToken,
+  #[msg("Corrupted public signals")]
+  CorruptedPublicInputs,
 }

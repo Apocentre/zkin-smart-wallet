@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use crate::program_error::ErrorCode;
 
 pub const PUBLIC_INPUTS_LEN: usize = 313;
 pub const ADDRESS_START_INDEX: usize = 249;
@@ -50,7 +51,7 @@ impl Zkp {
 
   /// Convert public inputs slice to array of [u8; 32]. Each u8 becomes [u8; 32]
   /// It will convert only the section of the public inputs that is relevant for the current iteration.
-  pub fn convert_public_inputs(&self) -> Vec<[u8; 32]> {
+  pub fn convert_public_inputs(&self) -> Result<Vec<[u8; 32]>> {
     let mut result = Vec::new();
     let start = self.offset();
     let end = start + self.batch_size as usize;
@@ -67,14 +68,14 @@ impl Zkp {
       iterate(start, ADDRESS_START_INDEX);
 
       // address is already a 32 bytes hex value
-      result.push(self.public_inputs[ADDRESS_START_INDEX..281].try_into().unwrap());
+      result.push(self.address()?);
       // so is rsa_modulo
-      result.push(self.public_inputs[281..PUBLIC_INPUTS_LEN].try_into().unwrap());
+      result.push(self.rsa_modulo()?);
     } else {
       iterate(start, end);
     }
 
-    result
+    Ok(result)
   }
 
   pub fn offset(&self) -> usize {
@@ -83,5 +84,21 @@ impl Zkp {
 
   pub fn next_iteration(&mut self) {
     self.iteration += 1;
+  }
+
+  pub fn address(&self) -> Result<[u8; 32]> {
+    let address: [u8; 32] = self.public_inputs[ADDRESS_START_INDEX..281]
+    .try_into()
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
+
+    Ok(address)
+  }
+
+  pub fn rsa_modulo(&self) -> Result<[u8; 32]> {
+    let rsa_modulo: [u8; 32] = self.public_inputs[281..PUBLIC_INPUTS_LEN]
+    .try_into()
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
+
+    Ok(rsa_modulo)
   }
 }
