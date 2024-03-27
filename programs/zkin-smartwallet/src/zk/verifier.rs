@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use groth16_solana::groth16::{self, Groth16Verifier};
 use crate::{
-  account_data::zkp::Zkp, program_error::ErrorCode, zk::verifying_key::VERIFYING_KEY
+  account_data::{auth_provider::AuthProvider, zkp::Zkp}, program_error::ErrorCode, zk::verifying_key::VERIFYING_KEY
 };
 
 pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
@@ -19,12 +19,23 @@ pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
 }
 
 
-pub fn verify_proof(zkp: &Zkp, owner: Pubkey) -> Result<()> {
+pub fn verify_proof(
+  zkp: &Zkp,
+  owner: Pubkey,
+  auth_provider: &AuthProvider,
+  provider: String,
+) -> Result<()> {
   // The signer of the tx must be the nonce claim value from JWT.
   // This way we are sure that the transactionw as signed by the user who pocess a valid JWT
   require!(zkp.nonce()?.eq(&owner), ErrorCode::InvalidAccount);
+  // make sure the the iss from the ZKP is the same with the one user provided. The user provided value is used
+  // as seed in the AuthProvider PDA derivation so we need to check the correct PDA is provided.
+  require!(zkp.iss()? == provider, ErrorCode::WrongAuthProviderProvided);
+  // Check that RSA modulus from the ZKP is registered by the operator. This way we verify that
+  // the correct (and one that we support) auth provider (iss) signed the JWT
+  require!(auth_provider.modulus_registered(zkp.rsa_modulus()?), ErrorCode::InvalidRsaKey);
 
-  // TODO: check expiration time
+  // TODO: check expiration time i.e. now <= zkp.exp()
   // TODO: make sure the the rsa_modulo belongs to the iss
 
   let mut verifier = Groth16Verifier::new(

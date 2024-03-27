@@ -78,7 +78,7 @@ impl Zkp {
       // address is already a 32 bytes hex value
       result.push(self.address()?);
       // so is rsa_modulo
-      result.push(self.rsa_modulo()?);
+      result.push(self.rsa_modulus()?);
     } else {
       iterate(start, end);
     }
@@ -143,10 +143,15 @@ impl Zkp {
     Ok(Pubkey::from(nonce))
   }
 
-  pub fn iss(&self) -> Vec<u8> {
+  pub fn iss(&self) -> Result<String> {
     let iss: &[u8] = &self.public_inputs[0..CLAIM_LEN];
 
-    Self::sanitize_claim(&Self::trim(iss))
+    let iss = String::from_utf8(
+      Self::sanitize_claim(&Self::trim(iss))
+    )
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
+
+    Ok(iss)
   }
 
   pub fn exp(&self) -> Result<i64> {
@@ -170,7 +175,7 @@ impl Zkp {
     Ok(address)
   }
 
-  pub fn rsa_modulo(&self) -> Result<[u8; 32]> {
+  pub fn rsa_modulus(&self) -> Result<[u8; 32]> {
     let rsa_modulo: [u8; 32] = self.public_inputs[281..PUBLIC_INPUTS_LEN]
     .try_into()
     .map_err(|_| ErrorCode::CorruptedPublicInputs)?;

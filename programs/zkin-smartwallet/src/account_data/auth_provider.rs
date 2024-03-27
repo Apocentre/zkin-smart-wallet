@@ -23,6 +23,7 @@ impl AuthProvider {
     }
   }
 
+  /// Registers a new modulus in a cyclic manner
   pub fn register_modulus(&mut self, rsa_modulus: [u8; 32]) {
     let count = self.rsa_modulus.len() + 1;
 
@@ -31,6 +32,11 @@ impl AuthProvider {
     } else {
       self.rsa_modulus.push(rsa_modulus);
     }
+  }
+
+  /// Checks if the modulus is registed
+  pub fn modulus_registered(&self, rsa_modulus: [u8; 32]) -> bool {
+    self.rsa_modulus.iter().find(|r| **r == rsa_modulus).is_some()
   }
 
   pub fn size() -> usize {

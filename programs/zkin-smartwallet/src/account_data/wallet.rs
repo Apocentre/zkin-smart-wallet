@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 #[account]
 pub struct Wallet {
   /// The ZkIn address of this wallet where `address = H(sub|iss|aud|salt)`
-  /// The address is a 32 bytes hex value but in string it's gonna be 64 bytes
+  /// The address is base58 encoded value of the above hash
   pub address: String,
   /// The owner of this wallet
   pub owner: Pubkey,

@@ -114,7 +114,12 @@ use super::*;
   /// 
   /// * `ctx` - The Anchor context holding the accounts
   /// * `wallet_address` - This is a deterministic address which is `address = H(sub|iss|aud|salt)` where H = Poseidon
-  pub fn create_wallet(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
-    processors::create_wallet::exec(ctx, wallet_address)
+  /// * `provider` - The auth provider which is the same as the iss claim value
+  pub fn create_wallet(
+    ctx: Context<CreateWallet>,
+    wallet_address: [u8; 32],
+    provider: String,
+  ) -> Result<()> {
+    processors::create_wallet::exec(ctx, wallet_address, provider)
   }
 }
