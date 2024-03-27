@@ -8,7 +8,7 @@ pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
   let prepared_public_inputs = groth16::prepare_inputs(
     &VERIFYING_KEY,
     zkp.prepared_public_inputs,
-    zkp.convert_public_inputs(),
+    zkp.convert_public_inputs()?,
     zkp.offset(),
   ).map_err(|_| ErrorCode::InvalidProofData)?;
 
@@ -24,7 +24,7 @@ pub fn verify_proof(zkp: &Zkp) -> Result<()> {
     &zkp.proof_a,
     &zkp.proof_b,
     &zkp.proof_c,
-    zkp.prepared_public_inputs.unwrap(),
+    zkp.prepared_public_inputs.expect("prepare inputs"),
     &VERIFYING_KEY,
   ).map_err(|_| ErrorCode::InvalidProofData)?;
   
