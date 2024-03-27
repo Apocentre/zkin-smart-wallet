@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::{
-  instructions::create_wallet::CreateWallet, zk::verifier::verify_proof,
-  program_error::ErrorCode,
+  instructions::create_wallet::CreateWallet, zk::verifier::verify_proof
 };
 
 pub fn exec(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
@@ -12,11 +11,7 @@ pub fn exec(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> 
   // Basically, require!(state.belongs_to_provider(&ctx.accounts.zkp))
 
   let zkp = &ctx.accounts.zkp;
-  verify_proof(zkp)?;
-
-  // The signer of the tx must be the nonce claim value from JWT.
-  // This way we are sure that the transactionw as signed by the user who pocess a valid JWT
-  require!(zkp.nonce()?.eq(&ctx.accounts.owner.key()), ErrorCode::InvalidAccount);
+  verify_proof(zkp, ctx.accounts.owner.key())?;
 
   // update wallet state
   let wallet = &mut ctx.accounts.wallet;

@@ -49,8 +49,13 @@ use super::*;
   /// # Arguments
   ///
   /// * `ctx` - The Anchor context holding the accounts
-  /// * `operators` - The list of the new operators
-  pub fn register_rsa_modulus(ctx: Context<RegisterRsaModulus>, rsa_modulus: [u8; 32]) -> Result<()> {
+  /// * `provider` - The auth provider which is the same as the iss claim value
+  /// * `operrsa_modulusators` - The new rsa_modulus to register for the given auth provider
+  pub fn register_rsa_modulus(
+    ctx: Context<RegisterRsaModulus>,
+    _provider: String,
+    rsa_modulus: [u8; 32],
+  ) -> Result<()> {
     processors::register_rsa_modulus::exec(ctx, rsa_modulus)
   }
 
