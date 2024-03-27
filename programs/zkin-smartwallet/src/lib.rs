@@ -7,7 +7,9 @@ mod constants;
 
 use anchor_lang::prelude::*;
 use crate::{
-  instructions::{create_wallet::*, init_zkp::*, prepare_zkp::*},
+  instructions::{
+    create_wallet::*, init_zkp::*, prepare_zkp::*, initialize::*,
+  },
   account_data::zkp::PUBLIC_INPUTS_LEN,
 };
 
@@ -15,8 +17,17 @@ declare_id!("zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy");
 
 #[program]
 pub mod zkin_smartwallet {
+  use super::*;
 
-use super::*;
+
+  /// Initialize
+  ///
+  /// # Arguments
+  ///
+  /// * `ctx` - The Anchor context holding the accounts
+  pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+    processors::initialize::exec(ctx)
+  }
 
   /// Currently the Solana runtime has heap size limit of 32Kb per transaction. Our public inputs have a length
   /// of 249 bytes which are converted into a Circo Field and each byte becomes [u8; 32]. The Groth16 verifier
