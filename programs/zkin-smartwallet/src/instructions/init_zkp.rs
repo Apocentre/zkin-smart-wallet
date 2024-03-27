@@ -9,7 +9,7 @@ pub struct InitZkp<'info> {
   #[account(
     init_if_needed,
     payer = operator,
-    space = size_of::<Zkp>() + 10, // Option size is not calculated properly with size_of so we just give a little bit margin
+    space = Zkp::size(),
     seeds = [b"zkp", wallet_address.as_ref()],
     bump,
   )]

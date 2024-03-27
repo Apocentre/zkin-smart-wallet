@@ -20,6 +20,13 @@ pub fn prepare_input(zkp: &mut Zkp) -> Result<()> {
 
 
 pub fn verify_proof(zkp: &Zkp, owner: Pubkey) -> Result<()> {
+  // The signer of the tx must be the nonce claim value from JWT.
+  // This way we are sure that the transactionw as signed by the user who pocess a valid JWT
+  require!(zkp.nonce()?.eq(&owner), ErrorCode::InvalidAccount);
+
+  // TODO: check expiration time
+  // TODO: make sure the the rsa_modulo belongs to the iss
+
   let mut verifier = Groth16Verifier::new(
     &zkp.proof_a,
     &zkp.proof_b,
@@ -29,12 +36,6 @@ pub fn verify_proof(zkp: &Zkp, owner: Pubkey) -> Result<()> {
   ).map_err(|_| ErrorCode::InvalidProofData)?;
   
   verifier.verify().map_err(|_| ErrorCode::GrothVerificationError)?;
-
-  // The signer of the tx must be the nonce claim value from JWT.
-  // This way we are sure that the transactionw as signed by the user who pocess a valid JWT
-  require!(zkp.nonce()?.eq(&owner), ErrorCode::InvalidAccount);
-
-  // TODO: make sure the the rsa_modulo belongs to the iss
 
   Ok(())
 }

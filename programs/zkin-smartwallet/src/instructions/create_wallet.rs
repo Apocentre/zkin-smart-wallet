@@ -1,16 +1,27 @@
 use anchor_lang::prelude::*;
 use crate::account_data::{
-  wallet::{wallet_size, Wallet}, zkp::Zkp,
+  auth_provider::AuthProvider, wallet::Wallet, zkp::Zkp
 };
 
 #[derive(Accounts)]
-#[instruction(wallet_address: [u8; 32])]
+#[instruction(wallet_address: [u8; 32], provider: String)]
 pub struct CreateWallet<'info> {
+    /// CHECK: The state account of each instance of this program, we don't need to do any checks
+    #[account()]
+    pub state: AccountInfo<'info>,
+  
+    /// The auth provider pda
+    #[account(
+      seeds = [state.key().as_ref(), provider.as_ref()],
+      bump
+    )]
+    pub auth_provider: Account<'info, AuthProvider>,
+
   /// CHECK: The PDA that represent the actial wallet
   #[account(
     init,
     payer = operator,
-    space = wallet_size(),
+    space = Wallet::size(),
     seeds = [wallet_address.as_ref()],
     bump,
   )]

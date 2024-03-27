@@ -1,8 +1,10 @@
+use std::mem::size_of;
 use anchor_lang::prelude::*;
 use crate::{constants::is_special_char, program_error::ErrorCode};
 
 pub const PUBLIC_INPUTS_LEN: usize = 313;
 pub const CLAIM_LEN: usize = 78;
+pub const EXP_CLAIM_LEN: usize = 15;
 pub const ADDRESS_START_INDEX: usize = 249;
 
 #[account]
@@ -48,6 +50,11 @@ impl Zkp {
       iteration: 0,
       bump,
     }
+  }
+
+  pub fn size() -> usize {
+    // Option size is not calculated properly with size_of so we just give a little bit margin
+    size_of::<Self>() + 10
   }
 
   /// Convert public inputs slice to array of [u8; 32]. Each u8 becomes [u8; 32]
@@ -127,7 +134,11 @@ impl Zkp {
       &Self::trim(&self.public_inputs[start..end])
     );
 
-    let nonce: [u8; 32] = bs58::decode(nonce).into_vec().unwrap().try_into().unwrap();
+    let nonce: [u8; 32] = bs58::decode(nonce)
+    .into_vec()
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?
+    .try_into()
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
 
     Ok(Pubkey::from(nonce))
   }
@@ -138,6 +149,19 @@ impl Zkp {
     Self::sanitize_claim(&Self::trim(iss))
   }
 
+  pub fn exp(&self) -> Result<i64> {
+    let start = 3 * CLAIM_LEN;
+    let end = start + EXP_CLAIM_LEN;
+
+    let exp: &[u8] = &self.public_inputs[start..end];
+    let exp: [u8; 8] = Self::sanitize_claim(&Self::trim(exp))
+    .try_into()
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
+
+    Ok(i64::from_be_bytes(exp))
+  }
+
+  /// Returns the address from the ZKP
   pub fn address(&self) -> Result<[u8; 32]> {
     let address: [u8; 32] = self.public_inputs[ADDRESS_START_INDEX..281]
     .try_into()

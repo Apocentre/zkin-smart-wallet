@@ -4,6 +4,8 @@ use anchor_lang::prelude::*;
 pub enum ErrorCode {
   #[msg("Only owner")]
   OnlyOwner,
+  #[msg("Wrong wallet provider")]
+  WrongWalletProvided,
   #[msg("Invalid Groth16 proof data")]
   InvalidProofData,
   #[msg("Invalid account")]

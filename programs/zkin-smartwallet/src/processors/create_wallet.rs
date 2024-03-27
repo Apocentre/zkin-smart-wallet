@@ -1,21 +1,18 @@
 use anchor_lang::prelude::*;
 use crate::{
-  instructions::create_wallet::CreateWallet, zk::verifier::verify_proof
+  instructions::create_wallet::CreateWallet, zk::verifier::verify_proof,
+  program_error::ErrorCode,
 };
 
 pub fn exec(ctx: Context<CreateWallet>, wallet_address: [u8; 32]) -> Result<()> {
-  let wallet_address = hex::encode(wallet_address);
-
-  // TODO: make sure the rsa_modulo is registered under the iss claim. We need to have a state account
-  // that store the rsa pubkeys of the auth providers (iss) we support.
-  // Basically, require!(state.belongs_to_provider(&ctx.accounts.zkp))
-
   let zkp = &ctx.accounts.zkp;
+  require!(zkp.address()? == wallet_address, ErrorCode::WrongWalletProvided);
+  
   verify_proof(zkp, ctx.accounts.owner.key())?;
-
+  
   // update wallet state
   let wallet = &mut ctx.accounts.wallet;
-  wallet.address = wallet_address;
+  wallet.address = String::from_utf8(zkp.address()?.to_vec()).unwrap();
   wallet.owner = ctx.accounts.owner.key();
   wallet.bump = ctx.bumps.wallet;
 

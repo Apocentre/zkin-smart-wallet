@@ -10,10 +10,10 @@ use crate::{
 #[instruction(provider: String)]
 pub struct RegisterRsaModulus<'info> {
   /// The state account of each instance of this program
-  #[account(mut)]
+  #[account()]
   pub state: Account<'info, State>,
 
-  /// The state account of each instance of this program
+  /// The auth provider pda
   #[account(
     init_if_needed,
     payer = operator,
