@@ -6,6 +6,8 @@ pub enum ErrorCode {
   OnlyOwner,
   #[msg("Invalid Groth16 proof data")]
   InvalidProofData,
+  #[msg("Invalid account")]
+  InvalidAccount,
   #[msg("Groth verification error")]
   GrothVerificationError,
   #[msg("Corrupted public signals")]

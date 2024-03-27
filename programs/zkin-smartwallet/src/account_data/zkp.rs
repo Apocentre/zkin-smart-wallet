@@ -103,17 +103,20 @@ impl Zkp {
     result
   }
 
-  pub fn nonce(&self) -> Vec<u8> {
+  pub fn nonce(&self) -> Result<Pubkey> {
     let start = 2 * CLAIM_LEN;
     let end = start + CLAIM_LEN;
     let nonce: &[u8] = &self.public_inputs[start..end];
+    let nonce: [u8; 32] = nonce
+    .try_into()
+    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
 
-    Self::trim(nonce)
+    Ok(Pubkey::from(nonce))
   }
 
   pub fn iss(&self) -> Vec<u8> {
     let iss: &[u8] = &self.public_inputs[0..CLAIM_LEN];
-    
+
     Self::trim(iss)
   }
 
