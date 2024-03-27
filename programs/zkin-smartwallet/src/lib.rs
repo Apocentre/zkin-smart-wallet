@@ -3,6 +3,7 @@ mod account_data;
 mod instructions;
 mod processors;
 mod program_error;
+mod constants;
 
 use anchor_lang::prelude::*;
 use crate::{

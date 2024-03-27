@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use crate::program_error::ErrorCode;
+use crate::{constants::is_special_char, program_error::ErrorCode};
 
 pub const PUBLIC_INPUTS_LEN: usize = 313;
 pub const CLAIM_LEN: usize = 78;
@@ -103,13 +103,31 @@ impl Zkp {
     result
   }
 
+  /// A claim when decoded might include some characters either at the start or end (or both).
+  /// The set includes the following characters: [:, ", ','] and they can be located at the following positions
+  /// 1. two at the front i.e. indexes 0, 1 i.e. :"
+  /// 2. two at the end i.e. indexes len - 1, len - 2. For example ," or ",
+  /// 3. one at the beginning 0 and one at the end len - 1. For example " and " or : and , at the end
+  /// 4. only one comma at the end
+  /// 5. only one colon at the start
+  ///
+  /// This template will remove those character from the given claim but it will make sure that it removes
+  /// the characters only if they are located at the aforementioned positions.
+  fn sanitize_claim(claim: &[u8]) -> Vec<u8> {
+    claim.iter()
+    .filter(|c| !is_special_char(**c))
+    .map(|c| *c)
+    .collect::<Vec<_>>()
+  }
+
   pub fn nonce(&self) -> Result<Pubkey> {
     let start = 2 * CLAIM_LEN;
     let end = start + CLAIM_LEN;
-    let nonce: &[u8] = &self.public_inputs[start..end];
-    let nonce: [u8; 32] = nonce
-    .try_into()
-    .map_err(|_| ErrorCode::CorruptedPublicInputs)?;
+    let nonce = Self::sanitize_claim(
+      &Self::trim(&self.public_inputs[start..end])
+    );
+
+    let nonce: [u8; 32] = bs58::decode(nonce).into_vec().unwrap().try_into().unwrap();
 
     Ok(Pubkey::from(nonce))
   }
