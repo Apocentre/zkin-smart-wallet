@@ -9,7 +9,6 @@ pub struct UpdateOperators<'info> {
   #[account(mut)]
   pub state: Account<'info, State>,
 
-
   #[account(
     address = state.owner @ ErrorCode::OnlyOwner,
   )]
