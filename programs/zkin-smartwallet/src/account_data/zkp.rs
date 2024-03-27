@@ -103,8 +103,17 @@ impl Zkp {
     result
   }
 
+  pub fn nonce(&self) -> Vec<u8> {
+    let start = 2 * CLAIM_LEN;
+    let end = start + CLAIM_LEN;
+    let nonce: &[u8] = &self.public_inputs[start..end];
+
+    Self::trim(nonce)
+  }
+
   pub fn iss(&self) -> Vec<u8> {
     let iss: &[u8] = &self.public_inputs[0..CLAIM_LEN];
+    
     Self::trim(iss)
   }
 
