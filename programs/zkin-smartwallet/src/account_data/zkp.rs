@@ -135,7 +135,7 @@ impl Zkp {
   pub fn iss(&self) -> Vec<u8> {
     let iss: &[u8] = &self.public_inputs[0..CLAIM_LEN];
 
-    Self::trim(iss)
+    Self::sanitize_claim(&Self::trim(iss))
   }
 
   pub fn address(&self) -> Result<[u8; 32]> {
