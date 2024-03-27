@@ -1,3 +1,4 @@
+use std::mem::size_of;
 use anchor_lang::prelude::*;
 
 // Each Auth provider rotates the RSA keys that it uses to sign JWT.
@@ -9,22 +10,30 @@ pub const MAX_RSA_MODULO: usize = 10;
 pub struct AuthProvider {
   /// A cyclic array storing the latest auth provider RSA keys. More specifically this is the modulus value
   /// which is the value of the field `n` returned by the JWKS endpoint of the auth provider`
-  pub rsa_modulus: [[u8; 32]; MAX_RSA_MODULO],
+  pub rsa_modulus: Vec<[u8; 32]>,
   /// The bump of the PDA account
   pub bump: u8,
 }
 
 impl AuthProvider {
   pub fn new(bump: u8) -> Self {
-    let rsa_modulus = [[0; 32]; MAX_RSA_MODULO];
-
     Self {
-      rsa_modulus,
+      rsa_modulus: vec![],
       bump,
     }
   }
 
-  pub fn register_modulus(&mut self, modulus: [u8; 32]) {
-    todo!()
+  pub fn register_modulus(&mut self, rsa_modulus: [u8; 32]) {
+    let count = self.rsa_modulus.len() + 1;
+
+    if count >= MAX_RSA_MODULO {
+      self.rsa_modulus[count % MAX_RSA_MODULO] = rsa_modulus;
+    } else {
+      self.rsa_modulus.push(rsa_modulus);
+    }
+  }
+
+  pub fn size() -> usize {
+    8 + size_of::<Self>() + (MAX_RSA_MODULO * size_of::<[u8; 32]>())
   }
 }

@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
 use crate::{
-  account_data::{auth_provider::AuthProvider, state::State}, program_error::ErrorCode
+  account_data::{
+    auth_provider::AuthProvider, state::State
+  },
+  program_error::ErrorCode,
 };
 
 #[derive(Accounts)]
@@ -14,7 +17,7 @@ pub struct RegisterRsaModulus<'info> {
   #[account(
     init_if_needed,
     payer = operator,
-    space = 0,
+    space = AuthProvider::size(),
     seeds = [state.key().as_ref(), provider.as_ref()],
     bump
   )]
