@@ -12,4 +12,6 @@ pub enum ErrorCode {
   GrothVerificationError,
   #[msg("Corrupted public signals")]
   CorruptedPublicInputs,
+  #[msg("Only operator")]
+  OnlyOperator,
 }
