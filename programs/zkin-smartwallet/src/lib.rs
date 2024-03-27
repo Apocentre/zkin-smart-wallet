@@ -8,17 +8,20 @@ mod constants;
 use anchor_lang::prelude::*;
 use crate::{
   instructions::{
-    create_wallet::*, init_zkp::*, prepare_zkp::*, initialize::*,
+    create_wallet::*, init_zkp::*, prepare_zkp::*, initialize::*, update_operators::*,
   },
-  account_data::zkp::PUBLIC_INPUTS_LEN,
+  account_data::{
+    zkp::PUBLIC_INPUTS_LEN, state::MAX_OPERATORS,
+  },
 };
 
 declare_id!("zkinKSHW3PijK2ZyRDUSXe8m2UKnNjJPvnv2NeZUvHy");
 
 #[program]
 pub mod zkin_smartwallet {
-  use super::*;
+  use account_data::state::MAX_OPERATORS;
 
+use super::*;
 
   /// Initialize
   ///
@@ -27,6 +30,16 @@ pub mod zkin_smartwallet {
   /// * `ctx` - The Anchor context holding the accounts
   pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
     processors::initialize::exec(ctx)
+  }
+
+  /// Updates the list of operators
+  ///
+  /// # Arguments
+  ///
+  /// * `ctx` - The Anchor context holding the accounts
+  /// * `operators` - The list of the new operators
+  pub fn update_operators(ctx: Context<UpdateOperators>, operators: [Pubkey; MAX_OPERATORS]) -> Result<()> {
+    processors::update_operators::exec(ctx, operators)
   }
 
   /// Currently the Solana runtime has heap size limit of 32Kb per transaction. Our public inputs have a length
