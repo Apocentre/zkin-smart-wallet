@@ -20,4 +20,6 @@ pub enum ErrorCode {
   OnlyOperator,
   #[msg("Invalid rsa key")]
   InvalidRsaKey,
+  #[msg("JWT token expired")]
+  TokenExpired,
 }

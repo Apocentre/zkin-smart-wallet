@@ -4,14 +4,21 @@ use crate::{
   program_error::ErrorCode,
 };
 
-pub fn exec(ctx: Context<CreateWallet>, wallet_address: [u8; 32], provider: String) -> Result<()> {
+pub fn exec(
+  ctx: Context<CreateWallet>,
+  wallet_address: [u8; 32],
+  provider: String,
+  now: i64,
+) -> Result<()> {
   let zkp = &ctx.accounts.zkp;
   require!(zkp.address()? == wallet_address, ErrorCode::WrongWalletProvided);
+
   verify_proof(
     zkp,
     ctx.accounts.owner.key(),
     &ctx.accounts.auth_provider,
     provider,
+    now,
   )?;
   
   // update wallet state

@@ -119,7 +119,13 @@ use super::*;
     ctx: Context<CreateWallet>,
     wallet_address: [u8; 32],
     provider: String,
+    _test_ts: i64,
   ) -> Result<()> {
-    processors::create_wallet::exec(ctx, wallet_address, provider)
+    #[cfg(not(feature = "localnet"))]
+    let now = Clock::get().unwrap().unix_timestamp;
+    #[cfg(feature = "localnet")]
+    let now = _test_ts;
+
+    processors::create_wallet::exec(ctx, wallet_address, provider, now)
   }
 }

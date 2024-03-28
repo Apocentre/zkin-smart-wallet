@@ -24,6 +24,7 @@ pub fn verify_proof(
   owner: Pubkey,
   auth_provider: &AuthProvider,
   provider: String,
+  now: i64,
 ) -> Result<()> {
   // The signer of the tx must be the nonce claim value from JWT.
   // This way we are sure that the transactionw as signed by the user who pocess a valid JWT
@@ -34,9 +35,8 @@ pub fn verify_proof(
   // Check that RSA modulus from the ZKP is registered by the operator. This way we verify that
   // the correct (and one that we support) auth provider (iss) signed the JWT
   require!(auth_provider.modulus_registered(zkp.rsa_modulus()?), ErrorCode::InvalidRsaKey);
-
-  // TODO: check expiration time i.e. now <= zkp.exp()
-  // TODO: make sure the the rsa_modulo belongs to the iss
+  // check that the JWT token is not expired
+  require!(now >= zkp.exp()?, ErrorCode::TokenExpired);
 
   let mut verifier = Groth16Verifier::new(
     &zkp.proof_a,
